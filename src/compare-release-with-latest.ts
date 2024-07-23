@@ -12,15 +12,18 @@ import { Project } from "./env.js";
 
 type InternalRelease = ReturnType<typeof reduceRelease>;
 
-export async function compareRelease(
-  connection: WebApi,
-  releaseId: number,
-  releaseDefinition: number,
-) {
+export async function compareRelease(connection: WebApi, releaseId: number) {
   const releaseApi = await connection.getReleaseApi();
-  const releaseA = await releaseApi
+  const release = await releaseApi
     .getRelease(Project, releaseId)
     .then(reduceRelease);
+
+  const releaseDefinition = release.releaseDefinition;
+  assert.ok(
+    releaseDefinition,
+    `release ${releaseId}: ${release.name} does not have a release definition`,
+  );
+
   const artifactVersions = await releaseApi.getArtifactVersions(
     Project,
     releaseDefinition,
@@ -28,14 +31,14 @@ export async function compareRelease(
 
   const table = new SimpleTable();
 
-  table.header("artifact", releaseA.name! ?? "", "new Release");
-  releaseA.artifacts?.forEach((art, index) => {
+  table.header("artifact", release.name! ?? "", "new Release");
+  release.artifacts?.forEach((art, index) => {
     assert.ok(art.alias);
 
     table.row(
       art.alias,
       art.version?.name ?? "",
-      artifectIsDifferent(releaseA, artifactVersions, art.alias)
+      artifectIsDifferent(release, artifactVersions, art.alias)
         ? chalk.green(artifactQueryDefaultName(artifactVersions, art.alias))
         : artifactQueryDefaultName(artifactVersions, art.alias),
     );
@@ -44,7 +47,7 @@ export async function compareRelease(
   console.log(table.toString());
 }
 
-function reduceRelease({ id, name, artifacts }: Release) {
+function reduceRelease({ id, name, artifacts, releaseDefinition }: Release) {
   return {
     id,
     name,
@@ -52,6 +55,7 @@ function reduceRelease({ id, name, artifacts }: Release) {
       alias,
       version: definitionReference?.version,
     })),
+    releaseDefinition: releaseDefinition?.id,
   };
 }
 

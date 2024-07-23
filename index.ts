@@ -11,4 +11,4 @@ let connData = await connection.connect();
 // fetchVersions(connection);
 
 // compareReleases(connection, 2011, 2005);
-compareRelease(connection, 2027, 12);
+compareRelease(connection, 2027);
