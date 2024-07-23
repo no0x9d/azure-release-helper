@@ -8,14 +8,22 @@ import SimpleTable from "cli-simple-table";
 import chalk from "chalk";
 import assert from "node:assert";
 
-import { Project } from "./env.js";
-
 type InternalRelease = ReturnType<typeof reduceRelease>;
 
-export async function compareRelease(connection: WebApi, releaseId: number) {
+export interface CompareOptions {
+  connection: WebApi;
+  releaseId: number;
+  project: string;
+}
+
+export async function compareReleaseWithLatest({
+  connection,
+  releaseId,
+  project,
+}: CompareOptions) {
   const releaseApi = await connection.getReleaseApi();
   const release = await releaseApi
-    .getRelease(Project, releaseId)
+    .getRelease(project, releaseId)
     .then(reduceRelease);
 
   const releaseDefinition = release.releaseDefinition;
@@ -25,7 +33,7 @@ export async function compareRelease(connection: WebApi, releaseId: number) {
   );
 
   const artifactVersions = await releaseApi.getArtifactVersions(
-    Project,
+    project,
     releaseDefinition,
   );
 

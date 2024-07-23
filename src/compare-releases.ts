@@ -4,21 +4,27 @@ import SimpleTable from "cli-simple-table";
 import chalk from "chalk";
 import assert from "node:assert";
 
-import { Project } from "./env.js";
-
 type InternalRelease = ReturnType<typeof reduceRelease>;
 
-export async function compareReleases(
-  connection: WebApi,
-  releaseIdA: number,
-  releaseIdB: number,
-) {
+export interface CompareOptions {
+  connection: WebApi;
+  releaseIdA: number;
+  releaseIdB: number;
+  project: string;
+}
+
+export async function compareReleases({
+  connection,
+  releaseIdA,
+  releaseIdB,
+  project,
+}: CompareOptions) {
   const releaseApi = await connection.getReleaseApi();
   const releaseA = await releaseApi
-    .getRelease(Project, releaseIdA)
+    .getRelease(project, releaseIdA)
     .then(reduceRelease);
   const releaseB = await releaseApi
-    .getRelease(Project, releaseIdB)
+    .getRelease(project, releaseIdB)
     .then(reduceRelease);
 
   const table = new SimpleTable();
