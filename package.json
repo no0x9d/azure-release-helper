@@ -5,6 +5,9 @@
   "bin": {
     "azrh": "dist/cli/bin.js"
   },
+  "scripts": {
+    "postinstall": "tsc"
+  },
   "devDependencies": {
     "@types/node": "^20.14.11",
     "@types/yargs": "^17.0.32",

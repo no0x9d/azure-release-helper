@@ -1,15 +1,41 @@
-# azure
+# azure release helper
 
-To install dependencies:
+## Setup
+To install via local git repo:
 
 ```bash
-bun install
+git clone <URL>
+npx tsc
+npm link
 ```
 
+To install globally via npm
+```bash
+npm -i no0x9d/azure-release-helper
+```
+
+### configuration
+To make it easier to use when you configure the base values via environment variables
+
+example: For the project in `https://dev.azure.com/My-Org/My-Project` you can configure the 
+following environment variables
+
+```bash
+AZURE_PERSONAL_ACCESS_TOKEN=1234567890abcdefghijklmnop
+AZURE_BASE_URL=https://dev.azure.com/My-Org
+AZURE_PROJECT=My-Project
+```
+
+
+
+## Usage
 To run:
 
 ```bash
-bun run index.ts
+azrh compare <release1> [release2]
 ```
+release 1 and 2 are azure devops ids of the releases you want to compare. 
+You can get a release id from the last part of the url.
 
-This project was created using `bun init` in bun v1.1.17. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+If release 2 is omitted the release is compared against the default versions of the 
+release definition.
