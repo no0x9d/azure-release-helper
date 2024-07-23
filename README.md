@@ -1,5 +1,8 @@
 # azure release helper
 
+> [!WARNING]  
+> Alpha level software to explore azure api. Creation of releases is untested.
+
 ## Setup
 To install via local git repo:
 
@@ -11,7 +14,7 @@ npm link
 
 To install globally via npm
 ```bash
-npm -i no0x9d/azure-release-helper
+npm install -g no0x9d/azure-release-helper
 ```
 
 ### configuration
@@ -30,6 +33,23 @@ AZURE_PROJECT=My-Project
 
 ## Usage
 To run:
+
+### create releases
+
+```bash
+azrh create --definition 12 --base 3456
+```
+
+To create a new release a release definition must be provided.
+Optionally a base release can be set and all versions will be 
+copied over from this release instead of using the default 
+version from the release definition.
+
+In the first step all environments with a manual deploy can be selected.
+
+In the second step the versions for the release artifacts can be customized.
+
+### compare releases
 
 ```bash
 azrh compare <release1> [release2]

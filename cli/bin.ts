@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
+import assert from "node:assert";
 import yargs from "yargs";
 import { createConnection } from "../src/azure-connection.js";
 import { compareReleaseWithLatest } from "../src/compare-release-with-latest.js";
 import { compareReleases } from "../src/compare-releases.js";
+import { createRelease } from "../src/create-release.js";
 
 const rawArgs = process.argv.slice(2);
 
@@ -37,6 +39,38 @@ yargs(rawArgs)
     requiresArg: true,
     demandOption: true,
   })
+  .command(
+    "create",
+    "create new release",
+    (args) =>
+      args
+        .option("definition", {
+          alias: "d",
+          description: "release definition id",
+          type: "number",
+          coerce: argIsNumber,
+          requiresArg: true,
+          demandOption: true,
+          default: process.env.AZURE_RELEASE_DEFINITION,
+          defaultDescription: "env AZURE_RELEASE_DEFINITION",
+        })
+        .option("base", {
+          alias: "b",
+          description: "base release",
+          type: "number",
+          coerce: argIsNumber,
+          requiresArg: true,
+        }),
+    async ({ org, pat, project, definition, base }) => {
+      const connection = createConnection(org, pat);
+      createRelease({
+        connection,
+        project,
+        releaseDefinitionId: definition,
+        baseRelease: base,
+      });
+    },
+  )
   .command(
     ["compare <release1> [release2]"],
     "compare two releases",
@@ -73,3 +107,10 @@ yargs(rawArgs)
   .demandCommand()
   .help()
   .parse();
+
+function argIsNumber(value: number | string): number {
+  if (typeof value === "number" && !isNaN(value)) {
+    return value;
+  }
+  throw new Error("release definition must be a number");
+}

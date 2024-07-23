@@ -46,7 +46,7 @@ export async function compareReleaseWithLatest({
     table.row(
       art.alias,
       art.version?.name ?? "",
-      artifectIsDifferent(release, artifactVersions, art.alias)
+      artifactIsDifferent(release, artifactVersions, art.alias)
         ? chalk.green(artifactQueryDefaultName(artifactVersions, art.alias))
         : artifactQueryDefaultName(artifactVersions, art.alias),
     );
@@ -67,7 +67,7 @@ function reduceRelease({ id, name, artifacts, releaseDefinition }: Release) {
   };
 }
 
-function artifectIsDifferent(
+function artifactIsDifferent(
   releaseA: InternalRelease,
   releaseB: ArtifactVersionQueryResult,
   alias: string,
