@@ -51,7 +51,7 @@ yargs(rawArgs)
           coerce: argIsNumber,
           requiresArg: true,
           demandOption: true,
-          default: process.env.AZURE_RELEASE_DEFINITION,
+          default: Number(process.env.AZURE_RELEASE_DEFINITION) || undefined,
           defaultDescription: "env AZURE_RELEASE_DEFINITION",
         })
         .option("base", {
