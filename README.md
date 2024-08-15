@@ -27,6 +27,7 @@ following environment variables
 AZURE_PERSONAL_ACCESS_TOKEN=1234567890abcdefghijklmnop
 AZURE_BASE_URL=https://dev.azure.com/My-Org
 AZURE_PROJECT=My-Project
+AZURE_RELEASE_DEFINITION=12
 ```
 
 
