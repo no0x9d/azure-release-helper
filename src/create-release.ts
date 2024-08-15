@@ -135,7 +135,11 @@ export async function createRelease({
       artifacts,
     };
 
-    releaseApi.createRelease(releaseStartMetadata, project);
+    const release = await releaseApi.createRelease(
+      releaseStartMetadata,
+      project,
+    );
+    console.log(`release with id ${release.id} successfully created`);
   }
 }
 
