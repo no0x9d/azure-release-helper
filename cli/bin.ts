@@ -6,6 +6,7 @@ import { createConnection } from "../src/azure-connection.js";
 import { compareReleaseWithLatest } from "../src/compare-release-with-latest.js";
 import { compareReleases } from "../src/compare-releases.js";
 import { createRelease } from "../src/create-release.js";
+import { fetchDeployedReleases } from "../src/fetch-deployed-releases.js";
 
 const rawArgs = process.argv.slice(2);
 
@@ -63,7 +64,7 @@ yargs(rawArgs)
         }),
     async ({ org, pat, project, definition, base }) => {
       const connection = createConnection(org, pat);
-      createRelease({
+      await createRelease({
         connection,
         project,
         releaseDefinitionId: definition,
@@ -102,6 +103,29 @@ yargs(rawArgs)
           project: project,
         });
       }
+    },
+  )
+  .command(
+    "currently-deployed",
+    "get currently deployed release",
+    (args) =>
+      args.option("definition", {
+        alias: "d",
+        description: "release definition id",
+        type: "number",
+        coerce: argIsNumber,
+        requiresArg: true,
+        demandOption: true,
+        default: Number(process.env.AZURE_RELEASE_DEFINITION) || undefined,
+        defaultDescription: "env AZURE_RELEASE_DEFINITION",
+      }),
+    async ({ org, pat, project, definition }) => {
+      const connection = createConnection(org, pat);
+      await fetchDeployedReleases({
+        connection,
+        project,
+        releaseDefinitionId: definition,
+      });
     },
   )
   .demandCommand()
