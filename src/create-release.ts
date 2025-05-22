@@ -18,6 +18,7 @@ export interface CompareOptions {
   releaseDefinitionId: number;
   project: string;
   baseRelease?: number;
+  basedOnEnvironment?: string | boolean;
 }
 
 export async function createRelease({
@@ -25,6 +26,7 @@ export async function createRelease({
   releaseDefinitionId,
   project,
   baseRelease,
+  basedOnEnvironment,
 }: CompareOptions) {
   const releaseApi = await connection.getReleaseApi();
 
@@ -33,6 +35,33 @@ export async function createRelease({
     project,
     releaseDefinitionId,
   );
+
+  if (basedOnEnvironment === true) {
+    const environments =
+      releaseDefinition.environments?.map((e) => e.name!) ?? [];
+    const selectedEnvironment = await select({
+      message: "Base release on current deployment on environment",
+      multiple: false,
+      options: environments.map((e) => ({
+        name: e,
+        value: e,
+      })),
+    });
+    if (!selectedEnvironment) {
+      throw new Error("Please select an environment");
+    }
+    basedOnEnvironment = selectedEnvironment;
+  }
+
+  if (typeof basedOnEnvironment === "string") {
+    const environment = releaseDefinition.environments?.find(
+      (e) => e.name === basedOnEnvironment,
+    );
+    if (!environment) {
+      throw new Error(`Environment ${basedOnEnvironment} not found`);
+    }
+    baseRelease = environment.currentRelease?.id;
+  }
 
   // get list of versions and default version for release definition
   const artifactVersions = await releaseApi.getArtifactVersions(

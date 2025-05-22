@@ -61,14 +61,28 @@ yargs(rawArgs)
           type: "number",
           coerce: argIsNumber,
           requiresArg: true,
+        })
+        .option("environment", {
+          alias: "e",
+          description:
+            "create release based on current deployment on environment",
+          type: "string",
+          coerce: (value: string | undefined) => {
+            // undefined or empty string
+            if (!value) {
+              return true; // Treat as a boolean flag
+            }
+            return value; // Treat as a string
+          },
         }),
-    async ({ org, pat, project, definition, base }) => {
+    async ({ org, pat, project, definition, base, environment }) => {
       const connection = createConnection(org, pat);
       await createRelease({
         connection,
         project,
         releaseDefinitionId: definition,
         baseRelease: base,
+        basedOnEnvironment: environment,
       });
     },
   )
