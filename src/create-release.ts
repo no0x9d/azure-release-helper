@@ -7,7 +7,7 @@ import type {
   BuildVersion,
   Release,
   ReleaseStartMetadata,
-} from "azure-devops-node-api/interfaces/ReleaseInterfaces.js";
+} from "azure-devops-node-api/interfaces/ReleaseInterfaces.ts";
 import chalk from "chalk";
 import SimpleTable from "cli-simple-table";
 import { select } from "inquirer-select-pro";

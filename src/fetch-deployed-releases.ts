@@ -1,8 +1,7 @@
 import type { WebApi } from "azure-devops-node-api";
 import type {
-  ArtifactMetadata,
   ReleaseDefinitionEnvironment,
-} from "azure-devops-node-api/interfaces/ReleaseInterfaces.js";
+} from "azure-devops-node-api/interfaces/ReleaseInterfaces.ts";
 import SimpleTable from "cli-simple-table";
 
 export interface Options {

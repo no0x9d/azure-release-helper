@@ -1,5 +1,5 @@
 import type { WebApi } from "azure-devops-node-api";
-import type { Release } from "azure-devops-node-api/interfaces/ReleaseInterfaces.js";
+import type { Release } from "azure-devops-node-api/interfaces/ReleaseInterfaces.ts";
 import SimpleTable from "cli-simple-table";
 import chalk from "chalk";
 import assert from "node:assert";

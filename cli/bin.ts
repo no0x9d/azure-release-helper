@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import assert from "node:assert";
 import yargs from "yargs";
-import { createConnection } from "../src/azure-connection.js";
-import { compareReleaseWithLatest } from "../src/compare-release-with-latest.js";
-import { compareReleases } from "../src/compare-releases.js";
-import { createRelease } from "../src/create-release.js";
-import { fetchDeployedReleases } from "../src/fetch-deployed-releases.js";
+import { createConnection } from "../src/azure-connection.ts";
+import { compareReleaseWithLatest } from "../src/compare-release-with-latest.ts";
+import { compareReleases } from "../src/compare-releases.ts";
+import { createRelease } from "../src/create-release.ts";
+import { fetchDeployedReleases } from "../src/fetch-deployed-releases.ts";
 
 const rawArgs = process.argv.slice(2);
 
